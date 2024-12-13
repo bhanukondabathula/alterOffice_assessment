@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { LuImagePlus } from "react-icons/lu";
-import { useFirebase } from "../services/Firebase";
+import { useFirebase } from "../services/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 
 function ProfileSinglePage() {
   const firebase = useFirebase();
-  const { fetchAllUsersPosts,fetchCurrentUserProfile } = useFirebase();
+  const { fetchAllUsersPosts, fetchCurrentUserProfile } = useFirebase();
   const [accountPostedImages, setAccountPostedImages] = useState([]);
   const navigate = useNavigate();
 
-  const [userData,setUserData] = useState([]);
+  const [userData, setUserData] = useState([]);
 
   const handleEditProfile = () => {
     const userId = firebase.userId; // Replace with the actual user ID from Firebase or your app logic
@@ -48,15 +49,13 @@ function ProfileSinglePage() {
     fetchAndLogPosts();
   }, [fetchAllUsersPosts]);
 
-
-  //fetchin user profile data
+  // Fetching user profile data
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const data = await fetchCurrentUserProfile();
         console.log("Fetched user profile data:", data);
-        setUserData(()=>data)
-      
+        setUserData(() => data);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -65,27 +64,29 @@ function ProfileSinglePage() {
     fetchUserProfile();
   }, [fetchCurrentUserProfile]);
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="w-full  bg-white p-3 flex items-center justify-center flex-col gap-3">
+    <div className="w-full bg-white p-3 flex items-center justify-center flex-col gap-3">
       <span className="w-full lg:w-11/12 flex items-center justify-center relative">
+        <FaArrowLeftLong
+          className="relative cursor-pointer self-start"
+          onClick={() => navigate(`/`)}
+        />
         {!firebase.url ? (
-          // eslint-disable-next-line jsx-a11y/img-redundant-alt
           <img
             src="/user.png"
-            alt="default image"
-            className="w-full h-96 object-contain rounded-2xl overflow-hidden shadow-md relative"
+            alt="default img"
+            className="w-full h-96 object-contain overflow-hidden shadow-md relative"
           />
         ) : (
           <img
             src={userData.profileURL}
             alt="userprofile"
-            onError={(e) => (e.target.src = '/user.png')}
-            className="w-full h-96 object-cover rounded-2xl overflow-hidden shadow-md relative"
+            onError={(e) => (e.target.src = "/user.png")}
+            className="w-full h-60 object-cover overflow-hidden shadow-md relative"
           />
         )}
 
@@ -93,14 +94,14 @@ function ProfileSinglePage() {
           <img
             src="/user.png"
             alt=""
-            onError={(e) => (e.target.src = '/user.png')}
+            onError={(e) => (e.target.src = "/user.png")}
             className="w-36 h-36 absolute left-0 bg-black -bottom-20 border-8 border-gray-700 rounded-full object-cover"
           />
         ) : (
           <img
             src={userData.profileURL}
             alt=""
-            className="w-36 h-36 absolute left-0  -bottom-20 border-8 border-gray-700 rounded-full object-cover"
+            className="w-36 h-36 absolute left-0 -bottom-20 border-8 border-gray-700 rounded-full object-cover"
           />
         )}
 
@@ -112,7 +113,7 @@ function ProfileSinglePage() {
           />
         </label>
       </span>
-      {/* edit profile */}
+      {/* Edit profile */}
       <div className="relative lg:w-8/12">
         <button
           className="border-2 border-gray-700 rounded-full py-1 px-5 hover:bg-green-400 font-semibold"
@@ -122,14 +123,13 @@ function ProfileSinglePage() {
         </button>
       </div>
 
-      {/* display profile */}
+      {/* Display profile */}
       <div className="relative lg:w-11/12 top-8">
-      <h1 className="text-lg font-semibold">{userData.userName}</h1>
-      <h2>{userData.bio}</h2>    
-        
+        <h1 className="text-lg font-semibold">{userData.userName}</h1>
+        <h2>{userData.bio}</h2>
       </div>
 
-      {/* posts */}
+      {/* Posts */}
       <div className="mt-20">
         <h1 className="font-semibold text-md">My Posts</h1>
       </div>

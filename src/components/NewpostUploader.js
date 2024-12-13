@@ -1,13 +1,11 @@
-
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { BsImage } from "react-icons/bs";
 import { SiYoutubemusic } from "react-icons/si";
-import { useFirebase } from "../services/Firebase";
+import { useFirebase } from "../services/firebase";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// eslint-disable-next-line react/prop-types
-export const NewpostUploader = ({ handleClose }) =>{
+export const NewpostUploader = ({ handleClose }) => {
   const [cover, setCover] = useState("");
   const [coverURL, setCoverURL] = useState("");
   const [disc, setDisc] = useState("");
@@ -16,10 +14,8 @@ export const NewpostUploader = ({ handleClose }) =>{
 
   const firebase = useFirebase();
 
-
-
   const handleSubmit = async (e) => {
-    console.log("submiting the data to firebase");
+    console.log("Submitting the data to firebase");
     e.preventDefault();
     await firebase.handleCreatePost(disc, cover);
     await firebase.addAllUsersPost(disc, cover);
@@ -43,7 +39,7 @@ export const NewpostUploader = ({ handleClose }) =>{
         <h1 className="text-lg font-semibold text-black">New Post</h1>
       </div>
       <form onSubmit={handleSubmit}>
-        {/* display */}
+        {/* Display cover image if uploaded */}
         {coverURL.length > 0 && (
           <div className="load image mb-3">
             <img
@@ -54,17 +50,18 @@ export const NewpostUploader = ({ handleClose }) =>{
           </div>
         )}
 
+        {/* Text input for description */}
         <textarea
           maxLength={250}
           onChange={(e) => setDisc(e.target.value)}
           value={disc}
           rows={6}
-          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-100 rounded-lg border outline-none  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white resize-none"
+          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-100 rounded-lg border outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white resize-none"
           placeholder="What's on your mind...."
           required
         />
         <div className="flex flex-col items-start justify-center w-full gap-2 mt-2">
-          {/* upload data */}
+          {/* Upload image */}
           <div className="flex items-center gap-2 cursor-pointer">
             <input
               type="file"
@@ -74,10 +71,7 @@ export const NewpostUploader = ({ handleClose }) =>{
               onChange={(e) => {
                 const file = e.target.files[0];
                 setCover(file);
-                console.log("e target", file);
-        
                 const url = file ? URL.createObjectURL(file) : "";
-           
                 setCoverURL(file ? url : "");
               }}
               required
@@ -87,6 +81,7 @@ export const NewpostUploader = ({ handleClose }) =>{
               Photos
             </label>
           </div>
+          {/* Upload video */}
           <div className="flex items-center gap-2">
             <input
               type="file"
@@ -100,6 +95,7 @@ export const NewpostUploader = ({ handleClose }) =>{
             </label>
           </div>
         </div>
+        {/* Submit button */}
         <div className="w-full">
           <input
             type="submit"
@@ -111,4 +107,4 @@ export const NewpostUploader = ({ handleClose }) =>{
       </form>
     </div>
   );
-}
+};
